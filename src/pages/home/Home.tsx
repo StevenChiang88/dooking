@@ -13,7 +13,13 @@ import Categories from "../../components/Categories";
 import Recommend from "../../components/Recommend";
 import Footer from "../../components/Footer";
 import { useNavigate } from "react-router-dom";
+import {
+  useGetHotelQuery,
+  useGetHotelTypeCountQuery,
+} from "../../store/hotelApi";
 const Home = () => {
+  const { data: hotelType, isSuccess: hotelTypeisSuccess } =
+    useGetHotelTypeCountQuery("");
   const navigate = useNavigate();
   const [date, setDate] = useState<any>([
     {
@@ -201,20 +207,29 @@ const Home = () => {
         </div>
       </div>
 
-      <div className=" mt-[60px] flex flex-col items-center justify-center   ">
-        <Attractions />
-        <div className="w-full lg:w-[1024px] my-4">
-          <h1 className="font-bold text-2xl">依住宿類型瀏覽</h1>
+      {hotelTypeisSuccess ? (
+        <div className=" mt-[60px] flex flex-col items-center justify-center   ">
+          <Attractions />
+          <div className="w-full lg:w-[1024px] my-4">
+            <h1 className="font-bold text-2xl">依住宿類型瀏覽</h1>
+          </div>
+          <Categories
+            飯店={hotelType.飯店}
+            Villa={hotelType.Villa}
+            小木屋={hotelType.小木屋}
+            青年旅館={hotelType.青年旅館}
+          />
+          <div className="w-full lg:w-[1024px] my-4">
+            <h1 className="font-bold text-2xl">入住本站的優質特色住宿</h1>
+            <h2 className=" text-lg text-gray-500 mb-4">
+              Villa、飯店、小木屋等等，本站什麼都有！
+            </h2>
+            <Recommend />
+          </div>
         </div>
-        <Categories />
-        <div className="w-full lg:w-[1024px] my-4">
-          <h1 className="font-bold text-2xl">入住本站的優質特色住宿</h1>
-          <h2 className=" text-lg text-gray-500 mb-4">
-            Villa、飯店、小木屋等等，本站什麼都有！
-          </h2>
-          <Recommend />
-        </div>
-      </div>
+      ) : (
+        <p>loading...</p>
+      )}
       <Footer />
     </div>
   );
