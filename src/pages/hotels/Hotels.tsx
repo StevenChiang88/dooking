@@ -6,10 +6,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendar } from "@fortawesome/free-regular-svg-icons";
 import format from "date-fns/format";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useGetHotelQuery } from "../../store/hotelApi";
 
 const Hotels = () => {
   const location = useLocation();
   const navigate = useNavigate();
+
+  const { data, isSuccess } = useGetHotelQuery({
+    city: "台北",
+    min: 10,
+    max: 100000,
+  });
+  console.log(data, "DATA");
   const [dateOpen, setDateOpen] = useState(false);
   const [detailOpen, setDetailOpen] = useState(false);
 
@@ -160,53 +168,66 @@ const Hotels = () => {
           </button>
         </div>
         <div className="flex-[3] flex gap-2 flex-col">
-          <div className="w-full h-[250px] p-2 border border-gray-500 flex gap-4 ">
-            <img
-              className="w-[180px] md:w-[220px] h-full object-cover"
-              alt="單一旅館"
-              src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/80948781.jpg?k=3a83a2995b116d84e9c17b83e139e50b997e0ee02e454aa613f202ed9e956448&o=&hp=1"
-            />
-            <div className="flex-1">
-              <div className="flex flex-col md:flex-row justify-between">
-                <h2 className="text-xl font-bold text-[#0071c2]">
-                  承億文旅台中鳥日子
-                </h2>
-                <div className="flex items-center gap-2">
-                  <h3>很好</h3>
-                  <button className="bg-[#003580] text-white p-2 rounded">
-                    7.4
-                  </button>
-                </div>
-              </div>
-              <div className="flex justify-between">
-                <div className="text-sm text-[#008009] border-l-2 pl-2 hidden md:block">
-                  <h3 className="font-bold text-black">雙人房－附私人衛浴</h3>
-                  <h3>免費取消</h3>
-                  <h3>立即搶下優惠價－可取消</h3>
-                </div>
-                <div className="mt-4">
-                  <h3 className="text-xl font-bold text-right">TWD 999</h3>
-                  <h3 className="text-sm text-gray-500 my-2 text-right my-">
-                    含稅費及其他費用
-                  </h3>
-                  <button
+          {isSuccess ? (
+            data.length === 0 ? (
+              <p>沒有您的搜尋結果</p>
+            ) : (
+              data.map((hotel: hotel) => (
+                <div
+                  key={hotel._id}
+                  className="w-full h-[250px] p-2 border border-gray-500 flex gap-4 "
+                >
+                  <img
                     onClick={() => {
-                      navigate("/hotel/sad");
+                      navigate(`/hotel/${hotel._id}`);
                     }}
-                    className="text-sm px-4 py-2 bg-[#003580] text-white"
-                  >
-                    查看客房供應情況
-                  </button>
+                    className="cursor-pointer w-[180px] md:w-[220px] h-full object-cover"
+                    alt={hotel._id}
+                    src={hotel.photos[0]}
+                  />
+                  <div className="flex-1">
+                    <div className="flex flex-col md:flex-row justify-between">
+                      <h2 className="text-xl font-bold text-[#0071c2]">
+                        {hotel.name}
+                      </h2>
+                      <div className="flex items-center gap-2">
+                        <button className="bg-[#003580] text-white p-2 rounded">
+                          {hotel.rating}
+                        </button>
+                      </div>
+                    </div>
+                    <div className="flex justify-between">
+                      <div className="text-sm text-[#008009] border-l-2 pl-2 hidden md:block">
+                        <h3 className="font-bold text-black">
+                          雙人房－附私人衛浴
+                        </h3>
+                        <h3>免費取消</h3>
+                        <h3>立即搶下優惠價－可取消</h3>
+                      </div>
+                      <div className="mt-4">
+                        <h3 className="text-xl font-bold text-right">
+                          {`TWD ${hotel.cheapeastPrice}`}
+                        </h3>
+                        <h3 className="text-sm text-gray-500 my-2 text-right my-">
+                          含稅費及其他費用
+                        </h3>
+                        <button
+                          onClick={() => {
+                            navigate(`/hotel/${hotel._id}`);
+                          }}
+                          className="text-sm px-4 py-2 bg-[#003580] text-white"
+                        >
+                          查看客房供應情況
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          </div>
-          <div className="w-full h-[300px] border border-gray-500"></div>
-          <div className="w-full h-[300px] border border-gray-500"></div>
-          <div className="w-full h-[300px] border border-gray-500"></div>
-          <div className="w-full h-[300px] border border-gray-500"></div>
-          <div className="w-full h-[300px] border border-gray-500"></div>
-          <div className="w-full h-[300px] border border-gray-500"></div>
+              ))
+            )
+          ) : (
+            <p>loading...</p>
+          )}
         </div>
       </div>
     </div>

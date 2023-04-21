@@ -2,7 +2,6 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/home/Home";
 import { Provider } from "react-redux";
-
 import Hotels from "./pages/hotels/Hotels";
 import Hotel from "./pages/hotel/Hotel";
 import store from "./store";

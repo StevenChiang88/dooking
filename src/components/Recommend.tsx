@@ -1,32 +1,37 @@
 import React from "react";
 import { useGetFeaturedHotelQuery } from "../store/hotelApi";
+import { useNavigate } from "react-router-dom";
 
 const Recommend = () => {
+  const navigate = useNavigate();
   const { data, isSuccess } = useGetFeaturedHotelQuery("");
   console.log(data, "hotel");
   return (
     <>
-      {!isSuccess ? (
+      {isSuccess ? (
         <div className="w-full lg:max-w-[1024px]">
           <div className=" grid grid-cols-1 md:grid-cols-2 lg:flex gap-4 lg:flex-wrap">
             {data.map((hotel: hotel) => (
-              <div className="w-[300px] h-[400px] mx-auto ">
+              <div key={hotel._id} className="w-[300px] h-[400px] mx-auto ">
                 <img
-                  className="w-full h-3/4 object-cover"
+                  onClick={() => {
+                    navigate(`hotel/${hotel._id}`);
+                  }}
+                  className="w-full h-3/4 object-cover cursor-pointer"
                   alt="推薦旅館"
-                  src="https://pix8.agoda.net/hotelImages/488/488905/488905_15031817180026216834.jpg?ca=3&ce=1&s=1024x768"
+                  src={hotel.photos[0]}
                 />
-                <h2 className="font-extrabold text-lg">和逸飯店‧台北民生館</h2>
+                <h2 className="font-extrabold text-lg">{hotel.name}</h2>
                 <h2 className="text-sm text-gray-500">
                   起價
                   <span className="text-black text-base font-bold">
-                    TWD 7,222
+                    {`TWD ${hotel.cheapeastPrice.toLocaleString()}`}
                   </span>
                 </h2>
-                <span className="text-sm text-gray-500">台北,台灣</span>
+                <span className="text-sm text-gray-500">{`${hotel.city},台灣`}</span>
                 <div>
                   <button className="w-[25px] h-[25px] text-white rounded bg-[#003580]">
-                    9.5
+                    {hotel.rating}
                   </button>
                 </div>
               </div>

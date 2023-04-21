@@ -10,9 +10,16 @@ const hotelApi = createApi({
       return {
         //前面是命名，後面是透過build來設定請求
         getHotel: build.query({
-          query() {
+          query(props) {
+if (props){
+  return `hotels?city=${props.city}&min=${props.min}&max=${props.max}`;
+} else{
+  return "hotels?city=台北&min=0&max=99999"
+}
+
+
+         
             //query設定請求的子路徑
-            return "hotels";
           },
         }),
         getHotelTypeCount: build.query({
@@ -21,7 +28,7 @@ const hotelApi = createApi({
             return "hotels/typeCount";
           }, //query查詢
         }),
-        getProductById: build.query({
+        getHotelById: build.query({
           query(hotelid) {
             //query設定請求的子路徑
             return `hotels/find/${hotelid}`;
@@ -38,6 +45,6 @@ const hotelApi = createApi({
   });
 
 
-export const {useGetHotelQuery,useGetHotelTypeCountQuery,useGetProductByIdQuery,useGetFeaturedHotelQuery} = hotelApi
+export const {useGetHotelQuery,useGetHotelTypeCountQuery,useGetHotelByIdQuery,useGetFeaturedHotelQuery} = hotelApi
 
 export default hotelApi

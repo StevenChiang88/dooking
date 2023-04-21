@@ -36,7 +36,6 @@ const Home = () => {
   });
 
   const [destination, setDestination] = useState<string>();
-
   const [dateOpen, setDateOpen] = useState<boolean>(false);
   const [detailOpen, setDetailOpen] = useState<boolean>(false);
 

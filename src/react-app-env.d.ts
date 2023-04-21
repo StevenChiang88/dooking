@@ -35,3 +35,10 @@ type hotel =   {
     showOnHomePage: boolean,
     __v: number
 }
+
+
+type rtkqFetchArgs = {
+    city: string,
+    max: number,
+    min: number
+}
