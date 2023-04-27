@@ -44,7 +44,7 @@ const Hotel = () => {
     <div>
       <NavBar />
       {slideOpen && (
-        <div className="sticky top-0 left-0 w-full h-screen bg-black/60 flex items-center justify-center">
+        <div className="sticky top-0 left-0 w-full h-screen bg-black/80 flex items-center justify-center">
           <FontAwesomeIcon
             onClick={() => {
               setSlideOpen(false);
@@ -107,9 +107,17 @@ const Hotel = () => {
           <div className="hidden lg:grid grid-cols-6 grid-rows-3 h-[750px] gap-4">
             <img
               onClick={() => {
-                handleSlide(1);
+                handleSlide(0);
               }}
               className="cursor-pointer col-start-1 col-end-3 row-start-1 row-end-2 w-full h-full object-cover"
+              alt="旅館照片"
+              src={data.photos[0]}
+            />
+            <img
+              onClick={() => {
+                handleSlide(1);
+              }}
+              className="cursor-pointer col-start-1 col-end-3 row-start-2 row-end-3 w-full h-full object-cover"
               alt="旅館照片"
               src={data.photos[1]}
             />
@@ -117,7 +125,7 @@ const Hotel = () => {
               onClick={() => {
                 handleSlide(2);
               }}
-              className="cursor-pointer col-start-1 col-end-3 row-start-2 row-end-3 w-full h-full object-cover"
+              className="cursor-pointer col-start-3 col-end-7 row-start-1 row-end-3 w-full h-full object-cover"
               alt="旅館照片"
               src={data.photos[2]}
             />
@@ -125,7 +133,7 @@ const Hotel = () => {
               onClick={() => {
                 handleSlide(3);
               }}
-              className="cursor-pointer col-start-3 col-end-7 row-start-1 row-end-3 w-full h-full object-cover"
+              className="cursor-pointer col-start-1 col-end-2 w-full h-full object-cover"
               alt="旅館照片"
               src={data.photos[3]}
             />
@@ -133,17 +141,9 @@ const Hotel = () => {
               onClick={() => {
                 handleSlide(4);
               }}
-              className="cursor-pointer col-start-1 col-end-2 w-full h-full object-cover"
-              alt="旅館照片"
-              src={data.photos[4]}
-            />
-            <img
-              onClick={() => {
-                handleSlide(5);
-              }}
               className="cursor-pointer col-start-2 col-end-3 w-full h-full object-cover"
               alt="旅館照片"
-              src={data.photos[5]}
+              src={data.photos[4]}
             />
             <img
               onClick={() => {
@@ -155,11 +155,11 @@ const Hotel = () => {
             />
             <img
               onClick={() => {
-                handleSlide(5);
+                handleSlide(6);
               }}
               className="cursor-pointer col-start-5 col-end-7 w-full h-full object-cover"
               alt="旅館照片"
-              src={data.photos[5]}
+              src={data.photos[6]}
             />
           </div>
           <div className="flex flex-col lg:flex-row gap-8 mt-7">

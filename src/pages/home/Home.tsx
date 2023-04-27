@@ -13,39 +13,29 @@ import Categories from "../../components/Categories";
 import Recommend from "../../components/Recommend";
 import Footer from "../../components/Footer";
 import { useNavigate } from "react-router-dom";
+import { useGetHotelTypeCountQuery } from "../../store/hotelApi";
+import { useDispatch, useSelector } from "react-redux";
 import {
-  useGetHotelQuery,
-  useGetHotelTypeCountQuery,
-} from "../../store/hotelApi";
+  updateDate,
+  updateDestination,
+  updateDetail,
+} from "../../store/reducer/searchSlice";
 const Home = () => {
   const { data: hotelType, isSuccess: hotelTypeisSuccess } =
     useGetHotelTypeCountQuery("");
   const navigate = useNavigate();
-  const [date, setDate] = useState<any>([
-    {
-      startDate: new Date(),
-      endDate: new Date(),
-      key: "selection",
-    },
-  ]);
-
-  const [detail, setDetail] = useState<detail>({
-    adult: 1,
-    child: 0,
-    room: 1,
-  });
-
-  const [destination, setDestination] = useState<string>();
+  const dispatch = useDispatch();
+  const search = useSelector((state: any) => state.search);
   const [dateOpen, setDateOpen] = useState<boolean>(false);
   const [detailOpen, setDetailOpen] = useState<boolean>(false);
 
   const detailHandler = (name: string, method: string) => {
-    setDetail((prev) => {
-      return {
-        ...prev,
-        [name]: method === "plus" ? detail[name] + 1 : detail[name] - 1,
-      };
-    });
+    let x = {
+      ...search.detail,
+      [name]:
+        method === "plus" ? search.detail[name] + 1 : search.detail[name] - 1,
+    };
+    dispatch(updateDetail({ detail: x }));
   };
 
   return (
@@ -64,7 +54,9 @@ const Home = () => {
                 <FontAwesomeIcon className="text-gray-500" icon={faBed} />
                 <input
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    setDestination(e.target.value);
+                    dispatch(
+                      updateDestination({ destination: e.target.value })
+                    );
                   }}
                   className="text-gray-500 w-full outline-none cursor-pointer"
                   placeholder="你要去哪裡?"
@@ -77,20 +69,20 @@ const Home = () => {
                     setDateOpen(!dateOpen);
                   }}
                   className="text-gray-500 cursor-pointer"
-                >{`${format(date[0].startDate, "MM/dd/yyyy")} - ${format(
-                  date[0].endDate,
+                >{`${format(search.date[0].startDate, "MM/dd/yyyy")} - ${format(
+                  search.date[0].endDate,
                   "MM/dd/yyyy"
                 )}`}</span>
                 {dateOpen && (
                   <DateRange
                     className="z-10 absolute top-[250px] md:top-[270px] lg:top-[55px] shadow-md"
                     onChange={(item) => {
-                      setDate([item.selection]);
+                      dispatch(updateDate({ date: [item.selection] }));
                       setDateOpen(!dateOpen);
                     }}
                     editableDateInputs={true}
                     moveRangeOnFirstSelection={false}
-                    ranges={date}
+                    ranges={search.date}
                     minDate={new Date()}
                   />
                 )}
@@ -102,14 +94,14 @@ const Home = () => {
                     setDetailOpen(!detailOpen);
                   }}
                   className="text-gray-500 cursor-pointer"
-                >{`${detail.adult}位成人．${detail.child}位孩童．${detail.room}間房`}</span>
+                >{`${search.detail.adult}位成人．${search.detail.child}位孩童．${search.detail.room}間房`}</span>
                 {detailOpen && (
                   <div className="z-10 w-[380px] absolute bg-white top-[300px] md:top-[335px] lg:top-[55px] shadow-md px-4 py-8 text-black">
                     <div className="flex items-center justify-between pb-4 border-b">
                       <span>成人</span>
                       <div className="flex gap-4 items-center">
                         <button
-                          disabled={detail.adult <= 1}
+                          disabled={search.detail.adult <= 1}
                           onClick={() => {
                             detailHandler("adult", "minus");
                           }}
@@ -117,7 +109,7 @@ const Home = () => {
                         >
                           -
                         </button>
-                        <span>{detail.adult}</span>
+                        <span>{search.detail.adult}</span>
                         <button
                           onClick={() => {
                             detailHandler("adult", "plus");
@@ -133,7 +125,7 @@ const Home = () => {
                       <span>孩童</span>
                       <div className="flex gap-4 items-center">
                         <button
-                          disabled={detail.child <= 0}
+                          disabled={search.detail.child <= 0}
                           onClick={() => {
                             detailHandler("child", "minus");
                           }}
@@ -141,7 +133,7 @@ const Home = () => {
                         >
                           -
                         </button>
-                        <span>{detail.child}</span>
+                        <span>{search.detail.child}</span>
                         <button
                           onClick={() => {
                             detailHandler("child", "plus");
@@ -157,7 +149,7 @@ const Home = () => {
                       <span>客房</span>
                       <div className="flex gap-4 items-center">
                         <button
-                          disabled={detail.room <= 1}
+                          disabled={search.detail.room <= 1}
                           onClick={() => {
                             detailHandler("room", "minus");
                           }}
@@ -165,7 +157,7 @@ const Home = () => {
                         >
                           -
                         </button>
-                        <span>{detail.room}</span>
+                        <span>{search.detail.room}</span>
                         <button
                           onClick={() => {
                             detailHandler("room", "plus");
@@ -179,6 +171,7 @@ const Home = () => {
 
                     <div className="flex items-center justify-center py-2 mt-4 w-full border border-[#003580] ">
                       <button
+                        className="w-full"
                         onClick={() => {
                           setDetailOpen(false);
                         }}
@@ -191,12 +184,13 @@ const Home = () => {
               </div>
               <div className="flex-auto">
                 <button
+                  disabled={!search.destination}
                   onClick={() => {
-                    navigate("/hotels", {
-                      state: { destination, detail, date },
-                    });
+                    navigate(
+                      `/hotels/?city=${search.destination}&min=0&max=9999999`
+                    );
                   }}
-                  className="bg-[#003580] w-full h-full "
+                  className="bg-[#003580] w-full h-full disabled:cursor-not-allowed "
                 >
                   搜尋
                 </button>

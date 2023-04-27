@@ -5,6 +5,8 @@ import { Provider } from "react-redux";
 import Hotels from "./pages/hotels/Hotels";
 import Hotel from "./pages/hotel/Hotel";
 import store from "./store";
+import Login from "./pages/login/Login";
+import Register from "./pages/register/Register";
 
 function App() {
   return (
@@ -14,6 +16,8 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/hotels" element={<Hotels />} />
           <Route path="/hotel/:id" element={<Hotel />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
         </Routes>
       </BrowserRouter>
     </Provider>
