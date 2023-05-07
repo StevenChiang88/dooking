@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
 const authApi = createApi({
   reducerPath: "authApi", //Api的名稱，不能重複
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:8800/api/auth/",
+    baseUrl: "https://dooking-server.onrender.com/api/auth/",
   }), //發送請求使用的工具
   endpoints(build) {
     // endpoints 用來指定Api中的功能，是一個函式，需要一個物件作為return

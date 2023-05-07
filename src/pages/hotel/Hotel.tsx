@@ -12,15 +12,22 @@ import {
   faXmarkCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { useGetHotelByIdQuery } from "../../store/hotelApi";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import Reserve from "../../components/Reserve";
+import { useSelector } from "react-redux";
 
 const Hotel = () => {
+  const navigate = useNavigate();
+  const search = useSelector((state: any) => state.search);
+
+  if (search.date[0].startDate === undefined) {
+    alert("請先選擇日期");
+    navigate("/");
+  }
   const location = useLocation();
   const { data, isSuccess } = useGetHotelByIdQuery(
     location.pathname.split("/")[2]
   );
-
-  console.log(data);
 
   const [slideNumber, setSlideNumber] = useState<number>(0);
   const [slideOpen, setSlideOpen] = useState<boolean>(false);
@@ -35,13 +42,12 @@ const Hotel = () => {
     if (action === "right") {
       x = slideNumber === data.photos.length - 1 ? 0 : slideNumber + 1;
     } else x = slideNumber === 0 ? data.photos.length - 1 : slideNumber - 1;
-    console.log(slideNumber);
 
     setSlideNumber(x);
   };
 
   return (
-    <div>
+    <div className="min-h-screen">
       <NavBar />
       {slideOpen && (
         <div className="sticky top-0 left-0 w-full h-screen bg-black/80 flex items-center justify-center">
@@ -74,7 +80,7 @@ const Hotel = () => {
         </div>
       )}
       {!isSuccess ? (
-        <p>loading...</p>
+        <p className="text-center">loading...</p>
       ) : (
         <div className="w-full p-6 lg:p-0 lg:max-w-[1024px] mx-auto">
           <div className=" flex justify-between my-8">
@@ -196,15 +202,13 @@ const Hotel = () => {
                 )}
               </div>
               <p className="font-bold text-xl my-2">
-                $ {`${data.cheapeastPrice}`}
+                $ {`${data.cheapeastPrice.toLocaleString()}`}
               </p>
-              <button className="px-4 py-2 bg-[#4175be] text-white">
-                現在就預約
-              </button>
             </div>
           </div>
         </div>
       )}
+      <Reserve hotelID={location.pathname.split("/")[2]} />
       <Footer />
     </div>
   );

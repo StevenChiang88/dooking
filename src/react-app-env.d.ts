@@ -41,6 +41,24 @@ type hotel = {
   __v: number;
 };
 
+type room = {
+  createdAt: string;
+  desc: string;
+  maxPeople: number;
+  price: number;
+  roomNumbers?: [roomNumbers];
+  title: string;
+  updatedAt: string;
+  __v: number;
+  _id: string;
+};
+
+type roomNumbers = {
+  number: number;
+  unavailableDates?: [number];
+  _id: string;
+};
+
 type rtkqFetchArgs = {
   city: string;
   max: number;
@@ -64,4 +82,34 @@ type loginData = {
     };
     token: string;
   };
+};
+
+type dataForOrder = {
+  userToken: string;
+  userID: string;
+  userName?: string | undefined;
+  hotel: string;
+  rooms: [
+    {
+      roomID: string;
+      roomTitle: string;
+      roomPrice: number;
+      roomNumber: number;
+    }?
+  ];
+  startDate: Date;
+  endDate: Date;
+  price: number;
+};
+
+type orderRoomDetail = {
+  roomTitle: string;
+  roomID: string;
+  roomPrice: number;
+  roomNumber: number;
+};
+
+type dataForUnavailable = {
+  dates: [number?];
+  id: string;
 };

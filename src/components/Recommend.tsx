@@ -1,11 +1,13 @@
 import React from "react";
 import { useGetFeaturedHotelQuery } from "../store/hotelApi";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Recommend = () => {
+  const search = useSelector((state: any) => state.search);
+
   const navigate = useNavigate();
   const { data, isSuccess } = useGetFeaturedHotelQuery("");
-  console.log(data, "hotel");
   return (
     <>
       {isSuccess ? (
@@ -15,6 +17,10 @@ const Recommend = () => {
               <div key={hotel._id} className="w-[300px] h-[400px] mx-auto ">
                 <img
                   onClick={() => {
+                    if (search.date[0].startDate === undefined) {
+                      alert("請先選擇日期");
+                      return;
+                    }
                     navigate(`hotel/${hotel._id}`);
                   }}
                   className="w-full h-3/4 object-cover cursor-pointer"

@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
 const hotelApi = createApi({
   reducerPath: "hotelApi", //Api的名稱，不能重複
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:8800/api/",
+    baseUrl: "https://dooking-server.onrender.com/api/",
   }), //發送請求使用的工具
   endpoints(build) {
     // endpoints 用來指定Api中的功能，是一個函式，需要一個物件作為return
@@ -38,6 +38,11 @@ const hotelApi = createApi({
           return "hotels/featured";
         },
       }),
+      getHotelRooms: build.query({
+        query(hotelid) {
+          return `hotels/getrooms/${hotelid}`;
+        },
+      }),
     };
   },
 });
@@ -47,6 +52,7 @@ export const {
   useGetHotelTypeCountQuery,
   useGetHotelByIdQuery,
   useGetFeaturedHotelQuery,
+  useGetHotelRoomsQuery,
 } = hotelApi;
 
 export default hotelApi;

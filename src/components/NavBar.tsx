@@ -8,6 +8,7 @@ const NavBar = () => {
   const navigate = useNavigate();
   const selector = useSelector((state: any) => state.auth);
   const dispatch = useDispatch();
+
   return (
     <div className="h-40 px-4 bg-[#003580] text-white flex flex-col items-center ">
       <div className="py-4 w-full max-w-[1024px] flex items-center justify-between ">

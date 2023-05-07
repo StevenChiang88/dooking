@@ -29,6 +29,14 @@ const Home = () => {
   const [dateOpen, setDateOpen] = useState<boolean>(false);
   const [detailOpen, setDetailOpen] = useState<boolean>(false);
 
+  const initialDate = [
+    {
+      startDate: new Date(),
+      endDate: new Date(),
+      key: "selection",
+    },
+  ];
+
   const detailHandler = (name: string, method: string) => {
     let x = {
       ...search.detail,
@@ -39,7 +47,7 @@ const Home = () => {
   };
 
   return (
-    <div>
+    <div className="min-h-screen ">
       <NavBar />
       <div>
         <div className="text-white bg-[#003580] flex justify-center pb-8 relative p-4">
@@ -69,10 +77,16 @@ const Home = () => {
                     setDateOpen(!dateOpen);
                   }}
                   className="text-gray-500 cursor-pointer"
-                >{`${format(search.date[0].startDate, "MM/dd/yyyy")} - ${format(
-                  search.date[0].endDate,
-                  "MM/dd/yyyy"
-                )}`}</span>
+                >
+                  {search.date[0].startDate === undefined ? (
+                    <p>請選擇日期</p>
+                  ) : (
+                    `${format(
+                      search.date[0].startDate,
+                      "MM/dd/yyyy"
+                    )} - ${format(search.date[0].endDate, "MM/dd/yyyy")}`
+                  )}
+                </span>
                 {dateOpen && (
                   <DateRange
                     className="z-10 absolute top-[250px] md:top-[270px] lg:top-[55px] shadow-md"
@@ -82,7 +96,7 @@ const Home = () => {
                     }}
                     editableDateInputs={true}
                     moveRangeOnFirstSelection={false}
-                    ranges={search.date}
+                    ranges={initialDate}
                     minDate={new Date()}
                   />
                 )}

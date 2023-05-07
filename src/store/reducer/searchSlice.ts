@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { retry } from "@reduxjs/toolkit/dist/query";
 
 export const searchSlice = createSlice({
   name: "search",
@@ -12,15 +11,14 @@ export const searchSlice = createSlice({
     },
     date: [
       {
-        startDate: new Date(),
-        endDate: new Date(),
+        startDate: undefined,
+        endDate: undefined,
         key: "selection",
       },
     ],
   },
   reducers: {
     updateDestination: (state, action) => {
-      console.log(action.payload.destination, "reducer內");
       state.destination = action.payload.destination;
     },
     updateDetail: (state, action) => {

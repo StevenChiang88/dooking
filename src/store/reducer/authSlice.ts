@@ -16,7 +16,7 @@ export const authSlice = createSlice({
     return {
       isLogged: true,
       token: token,
-      user: user,
+      user: user && JSON.parse(user),
     };
   },
   reducers: {
